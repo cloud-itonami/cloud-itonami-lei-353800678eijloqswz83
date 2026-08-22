@@ -1,0 +1,376 @@
+;; Verified public-register citations for the legal entity archived by this repository.
+;;
+;; Every row is checked live by tools/verify_citations.cljs:
+;;   * GET :cite/url must answer HTTP 2xx
+;;   * :cite/expect-substring must appear in the response body
+;;
+;; A URL that cannot be fetched, or whose body no longer carries the claim, is a
+;; DRIFT and fails the gate. Nothing is recorded here that was not retrieved
+;; (all rows were fetched and byte-matched on 2026-08-22).
+;;
+;; FOUR independent voices are cited, not one:
+;;   * GLEIF, the global LEI system (api.gleif.org) -- including its resolution
+;;     of registration authority RA000412 (the Legal Affairs Bureau / 法務局,
+;;     Japan's commercial register), of entity legal form T417 (株式会社,
+;;     kabusiki gaisya), and of the managing LOU -- which for this record is
+;;     株式会社東京証券取引所, Tokyo Stock Exchange, Inc. itself
+;;   * the National Tax Agency (国税庁), at its Corporate Number Publication
+;;     Site (houjin-bangou.nta.go.jp) -- the state's own per-entity page for
+;;     corporate number 6010401020516, which also carries change history the
+;;     other voices do not have (four absorbed subsidiaries, cited below)
+;;   * gBizINFO (info.gbiz.go.jp), the Ministry of Economy, Trade and
+;;     Industry's cross-ministry corporate-information aggregator, printing the
+;;     same name, number, and head-office address from a separately operated
+;;     service
+;;   * the issuer itself, at www.tokyo-gas.co.jp -- the privacy-policy page
+;;     this repository archives (80-data/public/tos.journal.edn archives
+;;     https://www.tokyo-gas.co.jp/utility/privacy/index.html, the same URL row
+;;     issuer-privacy-title cites) and its own company-profile page
+;;
+;; HOW THE TWO REGISTRY NUMBERS RELATE (so a reader does not count one voice
+;; twice). GLEIF names RA000412 -- Companies Registration (登記) operated by
+;; the Legal Affairs Bureau (法務局) -- as both register of record and
+;; validation authority, and records registeredAs 0104-01-020516, the
+;; 会社法人等番号 (company registration number) in the registry's own
+;; XXXX-XX-XXXXXX rendering. The National Tax Agency's 法人番号 (corporate
+;; number) 6010401020516 is, by the NTA's published construction, a single
+;; check digit (6) prefixed to those same 12 digits with the hyphens removed
+;; (010401020516). So rows gleif-registered-as / gleif-validated-as /
+;; gleif-ocid and rows nta-corporate-number / gbiz-corporate-number corroborate
+;; one underlying commercial-registry identity through two different state
+;; renderings of it -- and GLEIF's OpenCorporates id jp/6010401020516 prints
+;; the NTA-form number inside the GLEIF body itself.
+;;
+;; FIVE HONEST WRINKLES, SO A READER DOES NOT MISREAD THEM AS DRIFT:
+;;   1. GLEIF's creationDate "1885-09-30T15:00:00Z" (row gleif-creation-date)
+;;      and the issuer's founding date 明治18（1885）年10月1日 (row
+;;      issuer-profile-founded) are the SAME instant -- UTC rendering of Tokyo
+;;      midnight, JST being UTC+9. Not a disagreement.
+;;   2. The registered legal name is 東京瓦斯株式会社 -- with 瓦斯, the kanji
+;;      rendering of "gas" -- and that is what GLEIF (row gleif-legal-name-ja,
+;;      as \u escapes in the raw JSON), the NTA (row nta-legal-name), gBizINFO
+;;      (row gbiz-legal-name), and the issuer's own company-profile page (row
+;;      issuer-profile-legal-name) all print. But the issuer's consumer portal
+;;      brands itself 東京ガス株式会社 in katakana (row issuer-privacy-brand,
+;;      on the very privacy-policy page this repository archives). Same
+;;      company, marketing rendering vs registered rendering.
+;;   3. The head-office address arrives in three renderings that are one
+;;      place: GLEIF ja 海岸一丁目５番２０号 (kanji chōme, full-width digits;
+;;      row gleif-legal-address), NTA/gBizINFO 東京都港区海岸１丁目５番２０号
+;;      (full-width digit chōme; rows nta-head-office, gbiz-head-office), and
+;;      the issuer's 港区海岸1-5-20 (half-width; row issuer-profile-address).
+;;      GLEIF's English alternative address 1-5-20,Kaigan (row
+;;      gleif-legal-address-en) and postal code 105-8527 tie them together.
+;;   4. The GLEIF JSON body serves non-ASCII as literal \uXXXX escapes, so the
+;;      Japanese-text GLEIF rows below match those escape sequences (written in
+;;      this EDN with doubled backslashes), while the NTA / gBizINFO / issuer
+;;      pages serve raw UTF-8 and their rows match the characters directly.
+;;      Two encodings, one legal name.
+;;   5. The four nta-merger-* rows cite absorbed subsidiaries (ティージー
+;;      グローバルトレーディング, ティージープラス, 東京ガスリブソリュー
+;;      ションズ, スミレナ) from the NTA page's change-history section. They
+;;      are DIFFERENT legal entities (each with its own corporate number,
+;;      printed in the rows) that merged INTO this one -- cited as the NTA's
+;;      unique voice on this entity's history, not as claims about its current
+;;      identity.
+;;
+;; WHY THERE IS NO LISTING-VENUE ROW FOR TICKER 9531. The Tokyo Stock
+;; Exchange's per-issue quote page answers 404 to this gate (see
+;; :catalog/unreachable, measured 2026-08-22), and the issuer's own IR stock
+;; page renders its 証券コード client-side, so the server body this gate
+;; fetches does not carry "9531" to match. The venue connection that CAN be
+;; verified live is stronger than a quote page: GLEIF's managing LOU for this
+;; very record is 株式会社東京証券取引所, Tokyo Stock Exchange, Inc. (rows
+;; gleif-managing-lou, lou-legal-name-en, lou-lei) -- the exchange operator is
+;; the LEI issuer of record for the company. The ticker claim in README.md
+;; ("9531 (TSE Prime)") therefore rests on the README, not on a row below;
+;; nothing below asserts it.
+
+{:catalog/subject
+ #:company{:legal-name "東京瓦斯株式会社"
+           :legal-name-en "TOKYO GAS CO.,LTD."
+           :lei "353800678EIJLOQSWZ83"
+           :jurisdiction "JP"
+           :registered-at "RA000412"
+           :registered-as "0104-01-020516"
+           :corporate-number "6010401020516"
+           :legal-form "T417"
+           :website "https://www.tokyo-gas.co.jp"}
+ :catalog/authorities
+ [{:authority/id :gleif
+   :authority/name "Global Legal Entity Identifier Foundation"
+   :authority/root "https://api.gleif.org/"}
+  {:authority/id :nta
+   :authority/name "National Tax Agency (国税庁), Corporate Number Publication Site"
+   :authority/root "https://www.houjin-bangou.nta.go.jp/"}
+  {:authority/id :gbizinfo
+   :authority/name "gBizINFO (経済産業省), cross-ministry corporate-information aggregator"
+   :authority/root "https://info.gbiz.go.jp/"}
+  {:authority/id :issuer
+   :authority/name "Tokyo Gas Co., Ltd., at its own published website"
+   :authority/root "https://www.tokyo-gas.co.jp/"}]
+ :catalog/unreachable
+ [{:unreachable/authority "Tokyo Stock Exchange / JPX per-issue quote page"
+   :unreachable/url "https://quote.jpx.co.jp/jpx/template/quote.cgi?F=tmp/stock_detail&MKTN=T&QCODE=9531"
+   :unreachable/observed "HTTP 404 (measured 2026-08-22, both with this gate's User-Agent and with a browser User-Agent)"
+   :unreachable/consequence "No venue-voice row for ticker 9531 exists below. The exchange's connection to this entity is cited instead through GLEIF: the managing LOU of this LEI record is Tokyo Stock Exchange, Inc. itself (rows gleif-managing-lou, lou-legal-name-en, lou-lei)."}
+  {:unreachable/authority "Issuer IR stock-information page (server-side body)"
+   :unreachable/url "https://www.tokyo-gas.co.jp/IR/stock/index.html"
+   :unreachable/observed "HTTP 200, but the server HTML does not carry the securities code 9531 -- the page renders it client-side (measured 2026-08-22)"
+   :unreachable/consequence "The page is reachable but cannot support a ticker row for a body-substring gate, so none is recorded. The README's ticker claim is not asserted by this catalog."}]
+ :catalog/entries
+ [;; ── GLEIF: the LEI record itself ─────────────────────────────────────────
+  {:cite/id "gleif-lei"
+   :cite/authority :gleif
+   :cite/row-kind :identity
+   :cite/url "https://api.gleif.org/api/v1/lei-records/353800678EIJLOQSWZ83"
+   :cite/expect-substring "\"lei\":\"353800678EIJLOQSWZ83\""
+   :cite/claim "GLEIF issues LEI 353800678EIJLOQSWZ83."}
+  {:cite/id "gleif-legal-name-ja"
+   :cite/authority :gleif
+   :cite/row-kind :identity
+   :cite/url "https://api.gleif.org/api/v1/lei-records/353800678EIJLOQSWZ83"
+   :cite/expect-substring "\"legalName\":{\"name\":\"\\u6771\\u4eac\\u74e6\\u65af\\u682a\\u5f0f\\u4f1a\\u793e\",\"language\":\"ja\"}"
+   :cite/claim "The registered legal name is 東京瓦斯株式会社 (language ja; the raw JSON carries it as \\u escapes -- wrinkle 4)."}
+  {:cite/id "gleif-legal-name-en"
+   :cite/authority :gleif
+   :cite/row-kind :identity
+   :cite/url "https://api.gleif.org/api/v1/lei-records/353800678EIJLOQSWZ83"
+   :cite/expect-substring "\"name\":\"TOKYO GAS CO.,LTD.\",\"language\":\"en\""
+   :cite/claim "GLEIF records the alternative-language legal name TOKYO GAS CO.,LTD."}
+  {:cite/id "gleif-entity-status"
+   :cite/authority :gleif
+   :cite/row-kind :identity
+   :cite/url "https://api.gleif.org/api/v1/lei-records/353800678EIJLOQSWZ83"
+   :cite/expect-substring "\"status\":\"ACTIVE\""
+   :cite/claim "The entity status is ACTIVE."}
+  {:cite/id "gleif-jurisdiction"
+   :cite/authority :gleif
+   :cite/row-kind :identity
+   :cite/url "https://api.gleif.org/api/v1/lei-records/353800678EIJLOQSWZ83"
+   :cite/expect-substring "\"jurisdiction\":\"JP\""
+   :cite/claim "The jurisdiction is JP."}
+  {:cite/id "gleif-registered-at"
+   :cite/authority :gleif
+   :cite/row-kind :register
+   :cite/url "https://api.gleif.org/api/v1/lei-records/353800678EIJLOQSWZ83"
+   :cite/expect-substring "\"registeredAt\":{\"id\":\"RA000412\""
+   :cite/claim "The register of record is RA000412 (resolved by row ra412-organisation to the Legal Affairs Bureau, 法務局)."}
+  {:cite/id "gleif-registered-as"
+   :cite/authority :gleif
+   :cite/row-kind :register
+   :cite/url "https://api.gleif.org/api/v1/lei-records/353800678EIJLOQSWZ83"
+   :cite/expect-substring "\"registeredAs\":\"0104-01-020516\""
+   :cite/claim "The company registration number (会社法人等番号) is 0104-01-020516 -- the same 12 digits under the NTA corporate number's check digit (see header)."}
+  {:cite/id "gleif-validated-at"
+   :cite/authority :gleif
+   :cite/row-kind :register
+   :cite/url "https://api.gleif.org/api/v1/lei-records/353800678EIJLOQSWZ83"
+   :cite/expect-substring "\"validatedAt\":{\"id\":\"RA000412\""
+   :cite/claim "The validation authority is the same register, RA000412."}
+  {:cite/id "gleif-validated-as"
+   :cite/authority :gleif
+   :cite/row-kind :register
+   :cite/url "https://api.gleif.org/api/v1/lei-records/353800678EIJLOQSWZ83"
+   :cite/expect-substring "\"validatedAs\":\"0104-01-020516\""
+   :cite/claim "GLEIF validated the entity against the same registration number."}
+  {:cite/id "gleif-corroboration"
+   :cite/authority :gleif
+   :cite/row-kind :register
+   :cite/url "https://api.gleif.org/api/v1/lei-records/353800678EIJLOQSWZ83"
+   :cite/expect-substring "\"corroborationLevel\":\"FULLY_CORROBORATED\""
+   :cite/claim "The registration is FULLY_CORROBORATED against the register of record."}
+  {:cite/id "gleif-registration-status"
+   :cite/authority :gleif
+   :cite/row-kind :register
+   :cite/url "https://api.gleif.org/api/v1/lei-records/353800678EIJLOQSWZ83"
+   :cite/expect-substring "\"status\":\"ISSUED\""
+   :cite/claim "The LEI registration status is ISSUED."}
+  {:cite/id "gleif-creation-date"
+   :cite/authority :gleif
+   :cite/row-kind :identity
+   :cite/url "https://api.gleif.org/api/v1/lei-records/353800678EIJLOQSWZ83"
+   :cite/expect-substring "\"creationDate\":\"1885-09-30T15:00:00Z\""
+   :cite/claim "GLEIF's entity creation date is 1885-09-30T15:00:00Z -- UTC for 1885-10-01 JST, the founding date the issuer prints (wrinkle 1, row issuer-profile-founded)."}
+  {:cite/id "gleif-postal-code"
+   :cite/authority :gleif
+   :cite/row-kind :address
+   :cite/url "https://api.gleif.org/api/v1/lei-records/353800678EIJLOQSWZ83"
+   :cite/expect-substring "\"postalCode\":\"105-8527\""
+   :cite/claim "The legal-address postal code is 105-8527."}
+  {:cite/id "gleif-city"
+   :cite/authority :gleif
+   :cite/row-kind :address
+   :cite/url "https://api.gleif.org/api/v1/lei-records/353800678EIJLOQSWZ83"
+   :cite/expect-substring "\"city\":\"\\u6771\\u4eac\\u90fd \\u6e2f\\u533a\""
+   :cite/claim "The legal-address city is 東京都 港区 (as \\u escapes in the raw body)."}
+  {:cite/id "gleif-legal-address"
+   :cite/authority :gleif
+   :cite/row-kind :address
+   :cite/url "https://api.gleif.org/api/v1/lei-records/353800678EIJLOQSWZ83"
+   :cite/expect-substring "\"addressLines\":[\"\\u6d77\\u5cb8\\u4e00\\u4e01\\u76ee\\uff15\\u756a\\uff12\\uff10\\u53f7\"]"
+   :cite/claim "The legal address line is 海岸一丁目５番２０号 (kanji chōme rendering -- wrinkle 3)."}
+  {:cite/id "gleif-legal-address-en"
+   :cite/authority :gleif
+   :cite/row-kind :address
+   :cite/url "https://api.gleif.org/api/v1/lei-records/353800678EIJLOQSWZ83"
+   :cite/expect-substring "1-5-20,Kaigan"
+   :cite/claim "GLEIF's English alternative address is 1-5-20,Kaigan -- the same place as the three Japanese renderings (wrinkle 3)."}
+  {:cite/id "gleif-legal-form"
+   :cite/authority :gleif
+   :cite/row-kind :identity
+   :cite/url "https://api.gleif.org/api/v1/lei-records/353800678EIJLOQSWZ83"
+   :cite/expect-substring "\"legalForm\":{\"id\":\"T417\""
+   :cite/claim "The entity legal form is ELF T417 (resolved by row elf-t417-name to 株式会社, kabusiki gaisya)."}
+  {:cite/id "gleif-ocid"
+   :cite/authority :gleif
+   :cite/row-kind :register
+   :cite/url "https://api.gleif.org/api/v1/lei-records/353800678EIJLOQSWZ83"
+   :cite/expect-substring "\"ocid\":\"jp\\/6010401020516\""
+   :cite/claim "GLEIF's OpenCorporates id is jp/6010401020516 -- the NTA-form corporate number, printed inside the GLEIF body itself (see header)."}
+  {:cite/id "gleif-managing-lou"
+   :cite/authority :gleif
+   :cite/row-kind :venue
+   :cite/url "https://api.gleif.org/api/v1/lei-records/353800678EIJLOQSWZ83"
+   :cite/expect-substring "\"managingLou\":\"353800279ADEFGKNTV65\""
+   :cite/claim "The managing LOU is 353800279ADEFGKNTV65 (resolved by rows lou-legal-name-en / lou-lei to Tokyo Stock Exchange, Inc.)."}
+
+  ;; ── GLEIF: resolving the codes the main record uses ──────────────────────
+  {:cite/id "ra412-organisation"
+   :cite/authority :gleif
+   :cite/row-kind :register
+   :cite/url "https://api.gleif.org/api/v1/registration-authorities/RA000412"
+   :cite/expect-substring "\"internationalOrganizationName\":\"Legal Affairs Bureau\""
+   :cite/claim "RA000412 is operated by the Legal Affairs Bureau (法務局)."}
+  {:cite/id "ra412-register-name"
+   :cite/authority :gleif
+   :cite/row-kind :register
+   :cite/url "https://api.gleif.org/api/v1/registration-authorities/RA000412"
+   :cite/expect-substring "\"internationalName\":\"Companies Registration\""
+   :cite/claim "RA000412 is Companies Registration (登記), Japan's commercial register."}
+  {:cite/id "elf-t417-code"
+   :cite/authority :gleif
+   :cite/row-kind :identity
+   :cite/url "https://api.gleif.org/api/v1/entity-legal-forms/T417"
+   :cite/expect-substring "\"code\":\"T417\",\"country\":\"Japan\""
+   :cite/claim "ELF T417 is a Japanese legal form."}
+  {:cite/id "elf-t417-name"
+   :cite/authority :gleif
+   :cite/row-kind :identity
+   :cite/url "https://api.gleif.org/api/v1/entity-legal-forms/T417"
+   :cite/expect-substring "\"transliteratedName\":\"kabusikigaisya\""
+   :cite/claim "ELF T417 transliterates to kabusiki gaisya -- 株式会社, the stock company form in the entity's registered name."}
+  {:cite/id "lou-legal-name-en"
+   :cite/authority :gleif
+   :cite/row-kind :venue
+   :cite/url "https://api.gleif.org/api/v1/lei-records/353800678EIJLOQSWZ83/managing-lou"
+   :cite/expect-substring "\"name\":\"Tokyo Stock Exchange, Inc.\""
+   :cite/claim "The managing LOU of this record is Tokyo Stock Exchange, Inc. -- the exchange operator is the LEI issuer of record for the company (see header on the missing quote-page row)."}
+  {:cite/id "lou-lei"
+   :cite/authority :gleif
+   :cite/row-kind :venue
+   :cite/url "https://api.gleif.org/api/v1/lei-records/353800678EIJLOQSWZ83/managing-lou"
+   :cite/expect-substring "\"lei\":\"353800279ADEFGKNTV65\""
+   :cite/claim "That LOU's own LEI is 353800279ADEFGKNTV65, matching row gleif-managing-lou."}
+
+  ;; ── National Tax Agency: Corporate Number Publication Site ───────────────
+  {:cite/id "nta-legal-name"
+   :cite/authority :nta
+   :cite/row-kind :identity
+   :cite/url "https://www.houjin-bangou.nta.go.jp/henkorireki-johoto.html?selHouzinNo=6010401020516"
+   :cite/expect-substring "東京瓦斯株式会社"
+   :cite/claim "The NTA publishes the legal name 東京瓦斯株式会社 for corporate number 6010401020516 -- raw UTF-8, independently of GLEIF's escaped rendering (wrinkle 4)."}
+  {:cite/id "nta-corporate-number"
+   :cite/authority :nta
+   :cite/row-kind :register
+   :cite/url "https://www.houjin-bangou.nta.go.jp/henkorireki-johoto.html?selHouzinNo=6010401020516"
+   :cite/expect-substring "6010401020516"
+   :cite/claim "The corporate number (法人番号) is 6010401020516 -- check digit 6 over the registry digits GLEIF records as 0104-01-020516 (see header)."}
+  {:cite/id "nta-head-office"
+   :cite/authority :nta
+   :cite/row-kind :address
+   :cite/url "https://www.houjin-bangou.nta.go.jp/henkorireki-johoto.html?selHouzinNo=6010401020516"
+   :cite/expect-substring "東京都港区海岸１丁目５番２０号"
+   :cite/claim "The NTA prints the head office at 東京都港区海岸１丁目５番２０号 -- the same place as GLEIF's 海岸一丁目５番２０号 / 105-8527 (wrinkle 3)."}
+  {:cite/id "nta-merger-tg-global"
+   :cite/authority :nta
+   :cite/row-kind :history
+   :cite/url "https://www.houjin-bangou.nta.go.jp/henkorireki-johoto.html?selHouzinNo=6010401020516"
+   :cite/expect-substring "ティージーグローバルトレーディング株式会社（2010401154961）を合併"
+   :cite/claim "NTA change history: absorbed ティージーグローバルトレーディング株式会社 (corporate number 2010401154961) -- a different entity that merged into this one (wrinkle 5)."}
+  {:cite/id "nta-merger-tg-plus"
+   :cite/authority :nta
+   :cite/row-kind :history
+   :cite/url "https://www.houjin-bangou.nta.go.jp/henkorireki-johoto.html?selHouzinNo=6010401020516"
+   :cite/expect-substring "ティージープラス株式会社（2010401104438）を合併"
+   :cite/claim "NTA change history: absorbed ティージープラス株式会社 (2010401104438) (wrinkle 5)."}
+  {:cite/id "nta-merger-livsol"
+   :cite/authority :nta
+   :cite/row-kind :history
+   :cite/url "https://www.houjin-bangou.nta.go.jp/henkorireki-johoto.html?selHouzinNo=6010401020516"
+   :cite/expect-substring "東京ガスリブソリューションズ株式会社（2010401149648）を合併"
+   :cite/claim "NTA change history: absorbed 東京ガスリブソリューションズ株式会社 (2010401149648) (wrinkle 5)."}
+  {:cite/id "nta-merger-sumirena"
+   :cite/authority :nta
+   :cite/row-kind :history
+   :cite/url "https://www.houjin-bangou.nta.go.jp/henkorireki-johoto.html?selHouzinNo=6010401020516"
+   :cite/expect-substring "株式会社スミレナ（4010401149646）を合併"
+   :cite/claim "NTA change history: absorbed 株式会社スミレナ (4010401149646) (wrinkle 5)."}
+
+  ;; ── gBizINFO: METI's cross-ministry aggregator ────────────────────────────
+  {:cite/id "gbiz-legal-name"
+   :cite/authority :gbizinfo
+   :cite/row-kind :identity
+   :cite/url "https://info.gbiz.go.jp/hojin/ichiran?hojinBango=6010401020516"
+   :cite/expect-substring "東京瓦斯株式会社"
+   :cite/claim "gBizINFO prints the same registered name 東京瓦斯株式会社 from a separately operated state service."}
+  {:cite/id "gbiz-corporate-number"
+   :cite/authority :gbizinfo
+   :cite/row-kind :register
+   :cite/url "https://info.gbiz.go.jp/hojin/ichiran?hojinBango=6010401020516"
+   :cite/expect-substring "6010401020516"
+   :cite/claim "gBizINFO prints the same corporate number 6010401020516."}
+  {:cite/id "gbiz-head-office"
+   :cite/authority :gbizinfo
+   :cite/row-kind :address
+   :cite/url "https://info.gbiz.go.jp/hojin/ichiran?hojinBango=6010401020516"
+   :cite/expect-substring "東京都港区海岸１丁目５番２０号"
+   :cite/claim "gBizINFO prints the same head-office address as the NTA (wrinkle 3)."}
+
+  ;; ── The issuer itself ─────────────────────────────────────────────────────
+  {:cite/id "issuer-privacy-title"
+   :cite/authority :issuer
+   :cite/row-kind :archive-source
+   :cite/url "https://www.tokyo-gas.co.jp/utility/privacy/index.html"
+   :cite/expect-substring "個人情報保護方針"
+   :cite/claim "The privacy policy this repository archives (80-data/public/tos.journal.edn) is still published at its source URL and still titled 個人情報保護方針."}
+  {:cite/id "issuer-privacy-brand"
+   :cite/authority :issuer
+   :cite/row-kind :identity
+   :cite/url "https://www.tokyo-gas.co.jp/utility/privacy/index.html"
+   :cite/expect-substring "東京ガス株式会社"
+   :cite/claim "On its portal the issuer writes itself 東京ガス株式会社 -- katakana brand rendering of the registered 東京瓦斯株式会社 (wrinkle 2)."}
+  {:cite/id "issuer-profile-legal-name"
+   :cite/authority :issuer
+   :cite/row-kind :identity
+   :cite/url "https://www.tokyo-gas.co.jp/about/profile/index.html"
+   :cite/expect-substring "東京瓦斯株式会社"
+   :cite/claim "The issuer's own company-profile page prints the registered name 東京瓦斯株式会社."}
+  {:cite/id "issuer-profile-founded"
+   :cite/authority :issuer
+   :cite/row-kind :identity
+   :cite/url "https://www.tokyo-gas.co.jp/about/profile/index.html"
+   :cite/expect-substring "明治18（1885）年10月1日"
+   :cite/claim "The issuer states its founding as 明治18（1885）年10月1日 -- the JST date of GLEIF's 1885-09-30T15:00:00Z (wrinkle 1)."}
+  {:cite/id "issuer-profile-capital"
+   :cite/authority :issuer
+   :cite/row-kind :identity
+   :cite/url "https://www.tokyo-gas.co.jp/about/profile/index.html"
+   :cite/expect-substring "1,418億円"
+   :cite/claim "The issuer states its capital as 1,418億円 (self-reported; no other voice below asserts a capital figure)."}
+  {:cite/id "issuer-profile-address"
+   :cite/authority :issuer
+   :cite/row-kind :address
+   :cite/url "https://www.tokyo-gas.co.jp/about/profile/index.html"
+   :cite/expect-substring "港区海岸1-5-20"
+   :cite/claim "The issuer prints its head office as 港区海岸1-5-20 -- half-width rendering of the address in rows nta-head-office / gleif-legal-address (wrinkle 3)."}]}
