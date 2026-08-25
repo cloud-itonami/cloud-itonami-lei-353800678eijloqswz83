@@ -1,0 +1,25 @@
+;; facts.edn — GLEIF LEI レコードから取り込んだ法人レベルの事実。
+;; 生成物: scripts/lei-gleif-ingest.cljs（手編集しない）。
+;; 出典 https://api.gleif.org/api/v1/lei-records/353800678EIJLOQSWZ83 を 2026-08-25 に GET（HTTP 200）。応答本文の sha256 を同梱。
+;; fact/conflict は blueprint.edn の既存値と食い違った key。どちらも消していない。
+[["gleif-353800678eijloqswz83" "company/lei" "353800678EIJLOQSWZ83" 1 :add]
+ ["gleif-353800678eijloqswz83" "fact/source-url" "https://api.gleif.org/api/v1/lei-records/353800678EIJLOQSWZ83" 1 :add]
+ ["gleif-353800678eijloqswz83" "fact/retrieved-at" "2026-08-25" 1 :add]
+ ["gleif-353800678eijloqswz83" "fact/response-sha256" "efc4411b6494c5f3dba84bdf03025cd1fa9fb3f8ef11ae714b7b27427f515e7e" 1 :add]
+ ["gleif-353800678eijloqswz83" "source/dataset" "cloud-itonami-lei-gleif" 1 :add]
+ ["gleif-353800678eijloqswz83" "gleif/legal-name" "東京瓦斯株式会社" 1 :add]
+ ["gleif-353800678eijloqswz83" "gleif/legal-address" "海岸一丁目５番２０号, 105-8527, 東京都 港区, JP" 1 :add]
+ ["gleif-353800678eijloqswz83" "gleif/headquarters-address" "海岸一丁目５番２０号, 105-8527, 東京都 港区, JP" 1 :add]
+ ["gleif-353800678eijloqswz83" "gleif/registered-as" "0104-01-020516" 1 :add]
+ ["gleif-353800678eijloqswz83" "gleif/registration-authority" "RA000412" 1 :add]
+ ["gleif-353800678eijloqswz83" "gleif/jurisdiction" "JP" 1 :add]
+ ["gleif-353800678eijloqswz83" "gleif/category" "GENERAL" 1 :add]
+ ["gleif-353800678eijloqswz83" "gleif/legal-form-elf" "T417" 1 :add]
+ ["gleif-353800678eijloqswz83" "gleif/entity-status" "ACTIVE" 1 :add]
+ ["gleif-353800678eijloqswz83" "gleif/entity-creation-date" "1885-09-30T15:00:00Z" 1 :add]
+ ["gleif-353800678eijloqswz83" "gleif/registration-status" "ISSUED" 1 :add]
+ ["gleif-353800678eijloqswz83" "gleif/initial-registration-date" "2014-12-24T06:00:02Z" 1 :add]
+ ["gleif-353800678eijloqswz83" "gleif/last-update-date" "2025-12-24T00:00:23Z" 1 :add]
+ ["gleif-353800678eijloqswz83" "gleif/next-renewal-date" "2026-12-24T06:00:02Z" 1 :add]
+ ["gleif-353800678eijloqswz83" "gleif/managing-lou" "353800279ADEFGKNTV65" 1 :add]
+ ["gleif-353800678eijloqswz83" "gleif/corroboration-level" "FULLY_CORROBORATED" 1 :add]]
